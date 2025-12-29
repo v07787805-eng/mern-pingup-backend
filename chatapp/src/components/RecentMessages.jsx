@@ -1,0 +1,48 @@
+import React, { useEffect, useState } from 'react'
+import { dummyRecentMessagesData } from '../assets/assets'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
+
+const RecentMessages = () => {
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    setMessages(dummyRecentMessagesData); 
+  }, [])
+
+  return (
+    <div className="bg-white max-w-xs mt-4 p-4 min-h-20 rounded-md shadow text-xs text-slate-800">
+      <h3 className="font-semibold text-slate-800 mb-4">Recent Messages</h3>
+
+      <div className="flex flex-col max-h-56 overflow-y-scroll no-scrollbar">
+        {messages.map((message, index) => (
+          <Link
+            to={`/messages/${message.from_user_id._id}`}
+            key={index}
+            className="flex items-start gap-2 py-2 hover:bg-slate-100 rounded"
+          >
+            <img
+              src={message.from_user_id?.profile_picture || '/default-profile.png'}
+              alt="profile"
+              className="w-8 h-8 rounded-full"
+            />
+            <div className="w-full">
+              <div className='flex justify-between items-center'>
+                <p className="font-semibold">{message.from_user_id?.full_name || 'Unknown'}</p>
+                <p className='text-[10px] text-slate-400'>{moment(message.createdAt).fromNow()}</p>
+              </div>
+              <div className="flex justify-between items-center mt-1">
+                <p>{message.text || 'Media'}</p>
+                {!message.seen && (
+                  <p className='bg-indigo-500 text-white w-4 h-4 flex items-center justify-center rounded-full text-[10px]'>1</p>
+                )}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default RecentMessages
