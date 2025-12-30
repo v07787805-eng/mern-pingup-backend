@@ -1,15 +1,4 @@
-# dependencies
-node_modules
-
-# env files
+node_modules/
 .env
-**/.env
-
-# build
-dist/
-build/
-
-# misc
-.vscode/
-.DS_Store
-npm-debug.log*
+dist
+build
