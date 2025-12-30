@@ -3,9 +3,10 @@ import cors from 'cors';
 import 'dotenv/config';
 import { inngest, functions } from './inngest/index.js';
 import { serve } from 'inngest/express';
+import connectDB from './configs/db.js';
 
 const app = express();
-
+await connectDB()
 // Middlewares
 app.use(express.json());
 app.use(cors());

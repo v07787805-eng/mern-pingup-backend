@@ -11,14 +11,8 @@ const connectDB = async () => {
     if (!process.env.MONGODB_URL) {
       throw new Error('MONGODB_URL is missing in environment variables');
     }
-
-    const db = await mongoose.connect(process.env.MONGODB_URL, {
-      dbName: 'your_db_name', // optional but recommended
-    });
-
-    isConnected = db.connection.readyState === 1;
-
-    console.log('MongoDB connected successfully');
+    mongoose.connection.on('connected',()=>console.log('DB c'))
+    await mongoose.connect(`${process.env.MONGODB_URL}/pingup`)
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
     throw error; // ⬅️ important: throw, don’t exit

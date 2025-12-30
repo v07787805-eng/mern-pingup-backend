@@ -9,7 +9,7 @@ const syncUserCreation = inngest.createFunction(
   { id: "sync-user-created" },
   { event: "clerk/user.created" },
   async ({ event }) => {
-    await connectDB();
+    
 
     const { id, first_name, last_name, email_addresses, image_url } = event.data;
 
@@ -17,43 +17,42 @@ const syncUserCreation = inngest.createFunction(
     let username = baseUsername;
 
     let exists = await user.findOne({ username });
-    while (exists) {
-      username = `${baseUsername}${Math.floor(Math.random() * 10000)}`;
+    if (exists) {
+      username = baseUsername + Math.floor(Math.random() * 10000);
       exists = await user.findOne({ username });
     }
 
     const userData = {
       _id: id,
       email: email_addresses[0].email_address,
-      full_name: `${first_name || ""} ${last_name || ""}`.trim(),
+      full_name: first_name +" "+last_name,
       profile_picture: image_url,
-      username,
+      username
     };
 
     await user.create(userData);
 
-    return { success: true };
+    // return { success: true };
   }
 );
 
 /* ---------------- USER UPDATED ---------------- */
 const syncUserUpdation = inngest.createFunction(
-  { id: "sync-user-updated" },
+  { id: 'update-user-from-clerk' },
   { event: "clerk/user.updated" },
   async ({ event }) => {
-    await connectDB();
-
+    
     const { id, first_name, last_name, email_addresses, image_url } = event.data;
 
     const updatedUserData = {
       email: email_addresses[0].email_address,
-      full_name: `${first_name || ""} ${last_name || ""}`.trim(),
-      profile_picture: image_url,
+      full_name: first_name +" "+last_name,
+      profile_picture: image_url
     };
 
     await user.findByIdAndUpdate(id, updatedUserData);
 
-    return { success: true };
+    // return { success: true };
   }
 );
 
@@ -68,7 +67,7 @@ const syncUserDeletion = inngest.createFunction(
 
     await user.findByIdAndDelete(id);
 
-    return { success: true };
+    // return { success: true };
   }
 );
 

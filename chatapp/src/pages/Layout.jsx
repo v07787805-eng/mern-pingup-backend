@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import { dummyUserData } from '../assets/assets'
 import Loading from '../components/Loading'
 import Sidebar from '../components/Sidebar'
+import { Navigate } from "react-router-dom"
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
